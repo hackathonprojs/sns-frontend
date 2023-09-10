@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useCosmWasmClient, useSigningCosmWasmClient, useWallet, WalletConnectButton } from '@sei-js/react';
-import './custom.css';
+import './custom.css'; // Import the CSS file
 
 const CONTRACT_ADDRESS = 'sei1pr5nkrx2fg7htwff4ztsfeg5l4nwg4zlg8zdj2k3h7z4k7cqr3ms6cn8d5'; // (atlantic-2 example) sei18g4g35mhy5s88nshpa6flvpj9ex6u88l6mhjmzjchnrfa7xr00js0gswru
 
@@ -66,21 +66,25 @@ function Home() {
 
     return (
         <div>
-            <h1>Human-Friendly Name: {count ? count : '---'}</h1>
+            <h1 style={{color:'white',}}>Human-Friendly Name: {count ? count : '---'}</h1>
 
             {/* Step 2: Create an input field for the name */}
             <input
+				className="name-input"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
                 style={{
                     padding: '10px',
-					fontSize: '16px',
-					border: '1px solid #ccc',
+					fontSize: '24px',
+					border: '1px solid rgba(255, 255, 255, 0.5)', 
 					borderRadius: '5px',
 					width: '50%', // Adjust the width here to make it shorter
 					marginBottom: '10px',
+					backgroundColor: 'rgba(255, 255, 255, 0.2)', /* Semi-transparent background */
+					color: 'white',
+					
                 }}
             />
 
