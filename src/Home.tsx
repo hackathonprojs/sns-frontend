@@ -73,6 +73,14 @@ function Home() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter your name"
+                style={{
+                    padding: '10px',
+                    fontSize: '16px',
+                    border: '1px solid #ccc',
+                    borderRadius: '5px',
+                    width: '100%',
+                    marginBottom: '10px',
+                }}
             />
 
             <button disabled={isIncrementing} onClick={incrementCounter}>
