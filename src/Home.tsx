@@ -4,73 +4,83 @@ import { useCosmWasmClient, useSigningCosmWasmClient, useWallet, WalletConnectBu
 const CONTRACT_ADDRESS = 'sei1pr5nkrx2fg7htwff4ztsfeg5l4nwg4zlg8zdj2k3h7z4k7cqr3ms6cn8d5'; // (atlantic-2 example) sei18g4g35mhy5s88nshpa6flvpj9ex6u88l6mhjmzjchnrfa7xr00js0gswru
 
 function Home() {
-	const [count, setCount] = useState<number | undefined>();
-	const [error, setError] = useState<string>('');
-	const [isIncrementing, setIsIncrementing] = useState<boolean>(false);
+    const [count, setCount] = useState<number | undefined>();
+    const [error, setError] = useState<string>('');
+    const [isIncrementing, setIsIncrementing] = useState<boolean>(false);
+    const [name, setName] = useState<string>(''); // Step 1: Define a name state variable
 
-	// Helpful hook for getting the currently connected wallet and chain info
-	const { connectedWallet, accounts } = useWallet();
+    // Helpful hook for getting the currently connected wallet and chain info
+    const { connectedWallet, accounts } = useWallet();
 
-	// For querying cosmwasm smart contracts
-	const { cosmWasmClient: queryClient } = useCosmWasmClient();
-	
-	// For executing messages on cosmwasm smart contracts
-	const { signingCosmWasmClient: signingClient } = useSigningCosmWasmClient();
+    // For querying cosmwasm smart contracts
+    const { cosmWasmClient: queryClient } = useCosmWasmClient();
+    
+    // For executing messages on cosmwasm smart contracts
+    const { signingCosmWasmClient: signingClient } = useSigningCosmWasmClient();
 
-	const fetchCount = useCallback(async () => {
-	    const response = await queryClient?.queryContractSmart(CONTRACT_ADDRESS, { get_count: {} });
-	    return response?.count;
-	}, [queryClient]);
+    const fetchCount = useCallback(async () => {
+        const response = await queryClient?.queryContractSmart(CONTRACT_ADDRESS, { get_count: {} });
+        return response?.count;
+    }, [queryClient]);
 
-	useEffect(() => {
-	    fetchCount().then(setCount);
-	}, [connectedWallet, fetchCount]);
+    useEffect(() => {
+        fetchCount().then(setCount);
+    }, [connectedWallet, fetchCount]);
 
-	const incrementCounter = async () => {
-	    setIsIncrementing(true);
-		try {
-		    const senderAddress = accounts[0].address;
+    const incrementCounter = async () => {
+        setIsIncrementing(true);
+        try {
+            const senderAddress = accounts[0].address;
 
-		    // Build message content
-		    const msg = { reset: {"count": "alice.sei"} };
+            // Step 3: Include the name in the message content
+            const msg = { reset: { count: name } };
 
-		   // Define gas price and limit
-		    const fee = {
-			amount: [{ amount: '0.1', denom: 'usei' }],
-			gas: '200000'
-		    };
+            // Define gas price and limit
+            const fee = {
+                amount: [{ amount: '0.1', denom: 'usei' }],
+                gas: '200000'
+            };
 
-		    // Call smart contract execute msg
-		    await signingClient?.execute(senderAddress, CONTRACT_ADDRESS, msg, fee);
+            // Call smart contract execute msg
+            await signingClient?.execute(senderAddress, CONTRACT_ADDRESS, msg, fee);
 
-		    // Updates the counter state again
-		    const updatedCount = await fetchCount();
-		    setCount(updatedCount);
-		
-		    setIsIncrementing(false);
-		    setError('');
-		} catch (error) {
-		    if (error instanceof Error) {
-			setError(error.message);
-		    } else {
-			setError('unknown error');
-		    }
-		    setIsIncrementing(false);
-		}
-	};
+            // Updates the counter state again
+            const updatedCount = await fetchCount();
+            setCount(updatedCount);
+            
+            setIsIncrementing(false);
+            setError('');
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError('unknown error');
+            }
+            setIsIncrementing(false);
+        }
+    };
 
-	// Helpful component for wallet connection
-	if (!connectedWallet) return <WalletConnectButton />;
+    // Helpful component for wallet connection
+    if (!connectedWallet) return <WalletConnectButton />;
 
-	return (
-	    <div>
-		<h1>Human-Friendly Name: {count ? count : '---'}</h1>
-		<button disabled={isIncrementing} onClick={incrementCounter}>
-		    {isIncrementing ? 'updating...' : 'update'}
-		</button>
-		{error && <p style={{ color: 'red' }}>{error}</p>}
-	    </div>
-	);
+    return (
+        <div>
+            <h1>Human-Friendly Name: {count ? count : '---'}</h1>
+
+            {/* Step 2: Create an input field for the name */}
+            <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+            />
+
+            <button disabled={isIncrementing} onClick={incrementCounter}>
+                {isIncrementing ? 'updating...' : 'update'}
+            </button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </div>
+    );
 }
 
 export default Home;
