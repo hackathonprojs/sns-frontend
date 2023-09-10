@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useCosmWasmClient, useSigningCosmWasmClient, useWallet, WalletConnectButton } from '@sei-js/react';
 
-const CONTRACT_ADDRESS = 'sei16qrzhjcw9p95p5d0n4mnfesyfwp9dg3hz6npd4xlpe8xfu7ce75q3m4hsz'; // (atlantic-2 example) sei18g4g35mhy5s88nshpa6flvpj9ex6u88l6mhjmzjchnrfa7xr00js0gswru
+const CONTRACT_ADDRESS = 'sei1pr5nkrx2fg7htwff4ztsfeg5l4nwg4zlg8zdj2k3h7z4k7cqr3ms6cn8d5'; // (atlantic-2 example) sei18g4g35mhy5s88nshpa6flvpj9ex6u88l6mhjmzjchnrfa7xr00js0gswru
 
 function Home() {
 	const [count, setCount] = useState<number | undefined>();
@@ -32,7 +32,7 @@ function Home() {
 		    const senderAddress = accounts[0].address;
 
 		    // Build message content
-		    const msg = { increment: {} };
+		    const msg = { reset: {"count": "alice.sei"} };
 
 		   // Define gas price and limit
 		    const fee = {
@@ -64,9 +64,9 @@ function Home() {
 
 	return (
 	    <div>
-		<h1>Count is: {count ? count : '---'}</h1>
+		<h1>Human-Friendly Name: {count ? count : '---'}</h1>
 		<button disabled={isIncrementing} onClick={incrementCounter}>
-		    {isIncrementing ? 'incrementing...' : 'increment'}
+		    {isIncrementing ? 'updating...' : 'update'}
 		</button>
 		{error && <p style={{ color: 'red' }}>{error}</p>}
 	    </div>
