@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useCosmWasmClient, useSigningCosmWasmClient, useWallet, WalletConnectButton } from '@sei-js/react';
+import './custom.css';
 
 const CONTRACT_ADDRESS = 'sei1pr5nkrx2fg7htwff4ztsfeg5l4nwg4zlg8zdj2k3h7z4k7cqr3ms6cn8d5'; // (atlantic-2 example) sei18g4g35mhy5s88nshpa6flvpj9ex6u88l6mhjmzjchnrfa7xr00js0gswru
 
@@ -75,18 +76,21 @@ function Home() {
                 placeholder="Enter your name"
                 style={{
                     padding: '10px',
-                    fontSize: '16px',
-                    border: '1px solid #ccc',
-                    borderRadius: '5px',
-                    width: '100%',
-                    marginBottom: '10px',
+					fontSize: '16px',
+					border: '1px solid #ccc',
+					borderRadius: '5px',
+					width: '50%', // Adjust the width here to make it shorter
+					marginBottom: '10px',
                 }}
             />
 
-            <button disabled={isIncrementing} onClick={incrementCounter}>
-                {isIncrementing ? 'updating...' : 'update'}
-            </button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+			<div>
+				<button disabled={isIncrementing} onClick={incrementCounter}>
+					{isIncrementing ? 'updating...' : 'update'}
+				</button>
+				
+				{error && <p style={{ color: 'red' }}>{error}</p>}
+			</div>
         </div>
     );
 }
